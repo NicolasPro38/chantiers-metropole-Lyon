@@ -1,0 +1,258 @@
+/* === VARIABLES MÉTROPOLE DE LYON === */
+:root {
+    --rouge: #C8102E;
+    --rouge-fonce: #a00d24;
+    --rouge-clair: #f5e6e9;
+    --orange: #E87722;
+    --gris-fonce: #2c2c2c;
+    --gris-moyen: #666666;
+    --gris-clair: #f0f0f0;
+    --blanc: #ffffff;
+    --vert: #2e7d32;
+    --bleu: #1565c0;
+    --font: 'Segoe UI', Arial, sans-serif;
+    --sidebar-width: 320px;
+    --header-height: 60px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: var(--font);
+    background: var(--gris-clair);
+    color: var(--gris-fonce);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* === HEADER === */
+header {
+    height: var(--header-height);
+    background: var(--rouge);
+    color: var(--blanc);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    z-index: 1000;
+    flex-shrink: 0;
+}
+
+.logo-block {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    border: 2px solid white;
+    padding: 4px 8px;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+.logo-metropole { font-size: 11px; letter-spacing: 0.5px; }
+.logo-grand     { font-size: 9px; opacity: 0.85; }
+.logo-lyon      { font-size: 14px; font-weight: 900; letter-spacing: 1px; }
+
+.header-title h1 {
+    font-size: 18px;
+    font-weight: 600;
+}
+.header-subtitle {
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+.header-counter {
+    margin-left: auto;
+    text-align: right;
+}
+#counter-total {
+    font-size: 28px;
+    font-weight: 700;
+}
+.counter-label {
+    font-size: 12px;
+    opacity: 0.85;
+    margin-left: 4px;
+}
+
+/* === LAYOUT === */
+.app-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* === SIDEBAR === */
+.sidebar {
+    width: var(--sidebar-width);
+    background: var(--blanc);
+    border-right: 1px solid #ddd;
+    overflow-y: auto;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.filter-section, .stats-section {
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+}
+
+.filter-section h2, .stats-section h2 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--rouge);
+    margin-bottom: 12px;
+}
+
+.stats-section h3 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gris-moyen);
+    margin: 16px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gris-moyen);
+    margin: 10px 0 4px;
+}
+
+select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    color: var(--gris-fonce);
+    background: var(--blanc);
+    cursor: pointer;
+}
+select:focus { outline: 2px solid var(--rouge); border-color: var(--rouge); }
+
+.btn-primary, .btn-secondary {
+    width: 100%;
+    padding: 9px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s;
+}
+.btn-primary { background: var(--rouge); color: var(--blanc); }
+.btn-primary:hover { background: var(--rouge-fonce); }
+.btn-secondary { background: var(--gris-clair); color: var(--gris-fonce); }
+.btn-secondary:hover { background: #ddd; }
+
+/* === STAT CARDS === */
+.stat-cards {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.stat-card {
+    flex: 1;
+    background: var(--gris-clair);
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+    border-left: 3px solid var(--rouge);
+}
+.stat-value {
+    display: block;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--rouge);
+}
+.stat-label {
+    font-size: 11px;
+    color: var(--gris-moyen);
+    text-transform: uppercase;
+}
+
+/* === MAP === */
+.map-container {
+    flex: 1;
+    position: relative;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+/* === DETAIL PANEL === */
+.detail-panel {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 340px;
+    background: var(--blanc);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    z-index: 1000;
+    overflow: hidden;
+    border-top: 4px solid var(--rouge);
+}
+.detail-panel.hidden { display: none; }
+
+.detail-close {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: var(--gris-moyen);
+}
+.detail-close:hover { color: var(--rouge); }
+
+#detail-content {
+    padding: 16px;
+}
+#detail-content h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--rouge);
+    margin-bottom: 10px;
+    padding-right: 20px;
+}
+.detail-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+.detail-key {
+    font-weight: 600;
+    color: var(--gris-moyen);
+    min-width: 110px;
+    flex-shrink: 0;
+}
+.detail-val { color: var(--gris-fonce); }
+
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.badge-ouvert { background: #fff3e0; color: #e65100; }
+.badge-valide { background: #e8f5e9; color: var(--vert); }
+.badge-termine { background: var(--gris-clair); color: var(--gris-moyen); }
