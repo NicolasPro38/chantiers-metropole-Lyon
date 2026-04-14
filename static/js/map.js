@@ -264,3 +264,60 @@ document.addEventListener('DOMContentLoaded', function() {
         legendEl.style.cssText = 'background:white; padding:10px 14px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,0.2); font-size:13px; line-height:1.8;';
     }
 });
+
+// === RECHERCHE ADRESSE (Photon Grand Lyon) ===
+const searchInput = document.getElementById('search-input');
+const searchBtn = document.getElementById('search-btn');
+const searchResults = document.getElementById('search-results');
+let searchMarker = null;
+
+function rechercherAdresse(query) {
+    if (!query || query.length < 3) return;
+    const url = `https://download.data.grandlyon.com/geocoding/photon-bal/api?q=${encodeURIComponent(query)}&limit=6`;
+    fetch(url)
+        .then(r => r.json())
+        .then(data => {
+            searchResults.innerHTML = '';
+            searchResults.classList.remove('hidden');
+            if (!data.features || data.features.length === 0) {
+                searchResults.innerHTML = '<li style="color:#999">Aucun résultat</li>';
+                return;
+            }
+            data.features.forEach(f => {
+                const p = f.properties;
+                const parts = [p.name];
+                if (p.street && p.street !== p.name) parts.push(p.street);
+                if (p.city && p.city !== p.name) parts.push(p.city);
+                const label = parts.join(', ');
+                const li = document.createElement('li');
+                li.textContent = label;
+                li.addEventListener('click', () => {
+                    const [lng, lat] = f.geometry.coordinates;
+                    map.setView([lat, lng], 16);
+                    if (searchMarker) map.removeLayer(searchMarker);
+                    searchMarker = L.circleMarker([lat, lng], {
+                        radius: 8,
+                        fillColor: '#C8102E',
+                        color: '#fff',
+                        weight: 2,
+                        fillOpacity: 0.9
+                    }).addTo(map).bindPopup(label).openPopup();
+                    searchResults.classList.add('hidden');
+                    searchInput.value = label;
+                });
+                searchResults.appendChild(li);
+            });
+        });
+}
+
+searchBtn.addEventListener('click', () => rechercherAdresse(searchInput.value));
+searchInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') rechercherAdresse(searchInput.value);
+});
+searchInput.addEventListener('input', () => {
+    if (searchInput.value.length >= 3) rechercherAdresse(searchInput.value);
+    else searchResults.classList.add('hidden');
+});
+document.addEventListener('click', e => {
+    if (!e.target.closest('.search-bar')) searchResults.classList.add('hidden');
+});
