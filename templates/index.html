@@ -4,54 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chantiers – Métropole de Lyon</title>
-
-    <!-- Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-
     <link rel="stylesheet" href="/static/css/style.css"/>
 </head>
 <body>
 
 <header>
-    <div class="header-logo">
-        <div class="logo-block">
-            <span class="logo-metropole">Métropole</span>
+    <div class="logo-block">
+        <div class="logo-ligne1">Métropole</div>
+        <div class="logo-ligne2">
             <span class="logo-grand">Grand</span>
             <span class="logo-lyon">Lyon</span>
         </div>
     </div>
+
     <div class="header-title">
         <h1>🚧 Carte des chantiers</h1>
         <span class="header-subtitle">Travaux engagés sur la Métropole de Lyon</span>
     </div>
+
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Rechercher une adresse..."/>
+        <button id="search-btn">🔍</button>
+        <ul id="search-results" class="hidden"></ul>
+    </div>
+
     <div class="header-counter">
         <span id="counter-total">–</span>
         <span class="counter-label">chantiers</span>
     </div>
-    <div class="search-bar">
-        <input type="text" id="search-input" placeholder="Rechercher une adresse..."/>
-        <button id="search-btn">🔍</button>
-        <ul id="search-results"></ul>
-    </div>
 </header>
 
 <div class="app-container">
-
-    <!-- SIDEBAR -->
     <aside class="sidebar">
-
         <section class="filter-section">
             <h2>Filtres</h2>
-
             <label for="filter-commune">Commune</label>
             <select id="filter-commune">
                 <option value="">Toutes les communes</option>
             </select>
-
             <label for="filter-etat">État</label>
             <select id="filter-etat">
                 <option value="">Tous les états</option>
@@ -59,12 +52,10 @@
                 <option value="Validé">Validé</option>
                 <option value="Terminé">Terminé</option>
             </select>
-
             <label for="filter-nature">Nature</label>
             <select id="filter-nature">
                 <option value="">Toutes les natures</option>
             </select>
-
             <button id="btn-filter" class="btn-primary">Appliquer</button>
             <button id="btn-reset" class="btn-secondary">Réinitialiser</button>
         </section>
@@ -81,27 +72,20 @@
                     <span class="stat-label">Validés</span>
                 </div>
             </div>
-
             <h3>Top communes</h3>
             <canvas id="chart-communes" height="220"></canvas>
-
             <h3>Par type de travaux</h3>
             <canvas id="chart-nature" height="220"></canvas>
         </section>
-
     </aside>
 
-    <!-- MAP -->
     <main class="map-container">
         <div id="map"></div>
-
-        <!-- POPUP DETAIL -->
         <div id="detail-panel" class="detail-panel hidden">
             <button id="detail-close" class="detail-close">✕</button>
             <div id="detail-content"></div>
         </div>
     </main>
-
 </div>
 
 <script src="/static/js/map.js"></script>

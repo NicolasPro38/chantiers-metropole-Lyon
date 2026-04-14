@@ -1,3 +1,6 @@
+/* === IMPORT TYPO (proche Métropole Grand Lyon) === */
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;600&display=swap');
+
 /* === VARIABLES MÉTROPOLE DE LYON === */
 :root {
     --rouge: #C8102E;
@@ -10,9 +13,10 @@
     --blanc: #ffffff;
     --vert: #2e7d32;
     --bleu: #1565c0;
-    --font: 'Segoe UI', Arial, sans-serif;
+    --font: 'Barlow', 'Segoe UI', Arial, sans-serif;
+    --font-cond: 'Barlow Condensed', Arial Narrow, Arial, sans-serif;
     --sidebar-width: 320px;
-    --header-height: 60px;
+    --header-height: 64px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,43 +45,141 @@ header {
     flex-shrink: 0;
 }
 
+/* === LOGO MÉTROPOLE GRAND LYON === */
 .logo-block {
     display: flex;
     flex-direction: column;
-    line-height: 1;
-    border: 2px solid white;
-    padding: 4px 8px;
-    font-weight: 700;
-    font-size: 11px;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.logo-ligne1 {
+    background: var(--blanc);
+    color: var(--rouge);
+    font-family: var(--font-cond);
+    font-weight: 900;
+    font-size: 15px;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+    padding: 3px 8px;
+    display: inline-block;
+    align-self: flex-start;
 }
-.logo-metropole { font-size: 11px; letter-spacing: 0.5px; }
-.logo-grand     { font-size: 9px; opacity: 0.85; }
-.logo-lyon      { font-size: 14px; font-weight: 900; letter-spacing: 1px; }
 
+.logo-ligne2 {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    align-self: flex-end;
+}
+
+.logo-grand {
+    font-family: var(--font-cond);
+    font-weight: 900;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--rouge);
+    background: var(--blanc);
+    padding: 3px 8px;
+}
+
+.logo-lyon {
+    font-family: var(--font-cond);
+    font-weight: 900;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--blanc);
+    background: var(--rouge);
+    border: 2px solid var(--blanc);
+    padding: 3px 8px;
+}
+
+/* === TITRE HEADER === */
 .header-title h1 {
-    font-size: 18px;
-    font-weight: 600;
+    font-family: var(--font-cond);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
 }
 .header-subtitle {
+    font-family: var(--font);
     font-size: 12px;
     opacity: 0.85;
+    font-weight: 400;
 }
 
+/* === COMPTEUR === */
 .header-counter {
     margin-left: auto;
     text-align: right;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
 }
 #counter-total {
-    font-size: 28px;
-    font-weight: 700;
+    font-family: var(--font-cond);
+    font-size: 32px;
+    font-weight: 900;
 }
 .counter-label {
-    font-size: 12px;
+    font-size: 13px;
     opacity: 0.85;
-    margin-left: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
+
+/* === SEARCH BAR === */
+.search-bar {
+    position: relative;
+    display: flex;
+    gap: 6px;
+    margin-left: 20px;
+}
+.search-bar input {
+    width: 260px;
+    padding: 7px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: var(--font);
+    outline: none;
+    color: var(--gris-fonce);
+}
+.search-bar button {
+    padding: 7px 12px;
+    background: var(--rouge-fonce);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.search-bar button:hover { background: #800a1c; }
+#search-results {
+    position: absolute;
+    top: 38px;
+    left: 0;
+    width: 320px;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    list-style: none;
+    z-index: 2000;
+    max-height: 250px;
+    overflow-y: auto;
+}
+#search-results li {
+    padding: 9px 12px;
+    font-size: 13px;
+    color: #333;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+}
+#search-results li:hover { background: var(--rouge-clair); color: var(--rouge); }
+#search-results.hidden { display: none; }
 
 /* === LAYOUT === */
 .app-container {
@@ -95,7 +197,6 @@ header {
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    gap: 0;
 }
 
 .filter-section, .stats-section {
@@ -104,21 +205,23 @@ header {
 }
 
 .filter-section h2, .stats-section h2 {
-    font-size: 13px;
+    font-family: var(--font-cond);
+    font-size: 14px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     color: var(--rouge);
     margin-bottom: 12px;
 }
 
 .stats-section h3 {
+    font-family: var(--font-cond);
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--gris-moyen);
     margin: 16px 0 8px;
     text-transform: uppercase;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.5px;
 }
 
 label {
@@ -127,6 +230,8 @@ label {
     font-weight: 600;
     color: var(--gris-moyen);
     margin: 10px 0 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
 select {
@@ -135,6 +240,7 @@ select {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 13px;
+    font-family: var(--font);
     color: var(--gris-fonce);
     background: var(--blanc);
     cursor: pointer;
@@ -147,7 +253,10 @@ select:focus { outline: 2px solid var(--rouge); border-color: var(--rouge); }
     border: none;
     border-radius: 4px;
     font-size: 13px;
-    font-weight: 600;
+    font-family: var(--font-cond);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
     cursor: pointer;
     margin-top: 8px;
     transition: background 0.2s;
@@ -173,14 +282,17 @@ select:focus { outline: 2px solid var(--rouge); border-color: var(--rouge); }
 }
 .stat-value {
     display: block;
-    font-size: 22px;
-    font-weight: 700;
+    font-family: var(--font-cond);
+    font-size: 26px;
+    font-weight: 900;
     color: var(--rouge);
 }
 .stat-label {
     font-size: 11px;
+    font-weight: 600;
     color: var(--gris-moyen);
     text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* === MAP === */
@@ -188,7 +300,6 @@ select:focus { outline: 2px solid var(--rouge); border-color: var(--rouge); }
     flex: 1;
     position: relative;
 }
-
 #map {
     width: 100%;
     height: 100%;
@@ -225,11 +336,14 @@ select:focus { outline: 2px solid var(--rouge); border-color: var(--rouge); }
     padding: 16px;
 }
 #detail-content h3 {
-    font-size: 14px;
+    font-family: var(--font-cond);
+    font-size: 15px;
     font-weight: 700;
     color: var(--rouge);
     margin-bottom: 10px;
     padding-right: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 .detail-row {
     display: flex;
@@ -242,6 +356,9 @@ select:focus { outline: 2px solid var(--rouge); border-color: var(--rouge); }
     color: var(--gris-moyen);
     min-width: 110px;
     flex-shrink: 0;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
 }
 .detail-val { color: var(--gris-fonce); }
 
@@ -252,56 +369,56 @@ select:focus { outline: 2px solid var(--rouge); border-color: var(--rouge); }
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
-.badge-ouvert { background: #fff3e0; color: #e65100; }
-.badge-valide { background: #e8f5e9; color: var(--vert); }
+.badge-ouvert  { background: #fff3e0; color: #e65100; }
+.badge-valide  { background: #fde8ec; color: var(--rouge); }
 .badge-termine { background: var(--gris-clair); color: var(--gris-moyen); }
 
-/* === SEARCH BAR === */
-.search-bar {
-    position: relative;
+/* === CORRECTION LOGO === */
+.logo-block {
     display: flex;
-    gap: 6px;
-    margin-left: auto;
-    margin-right: 20px;
+    flex-direction: column;
+    gap: 3px;
+    flex-shrink: 0;
 }
-.search-bar input {
-    width: 260px;
-    padding: 7px 12px;
+.logo-ligne1 {
+    background: var(--rouge);
+    color: var(--blanc);
+    border: 2px solid var(--blanc);
+    font-family: var(--font-cond);
+    font-weight: 900;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    align-self: flex-start;
+}
+.logo-ligne2 {
+    display: flex;
+    align-items: stretch;
+    align-self: flex-end;
+    border: 2px solid var(--blanc);
+}
+.logo-grand {
+    font-family: var(--font-cond);
+    font-weight: 900;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--rouge);
+    background: var(--blanc);
+    padding: 3px 8px;
     border: none;
-    border-radius: 4px;
-    font-size: 13px;
-    outline: none;
 }
-.search-bar button {
-    padding: 7px 12px;
-    background: var(--rouge-fonce);
-    color: white;
+.logo-lyon {
+    font-family: var(--font-cond);
+    font-weight: 900;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--blanc);
+    background: var(--rouge);
+    padding: 3px 8px;
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
 }
-.search-bar button:hover { background: #800a1c; }
-#search-results {
-    position: absolute;
-    top: 38px;
-    left: 0;
-    width: 320px;
-    background: white;
-    border-radius: 4px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    list-style: none;
-    z-index: 2000;
-    max-height: 250px;
-    overflow-y: auto;
-}
-#search-results li {
-    padding: 9px 12px;
-    font-size: 13px;
-    color: #333;
-    cursor: pointer;
-    border-bottom: 1px solid #f0f0f0;
-}
-#search-results li:hover { background: var(--rouge-clair); color: var(--rouge); }
-#search-results.hidden { display: none; }
