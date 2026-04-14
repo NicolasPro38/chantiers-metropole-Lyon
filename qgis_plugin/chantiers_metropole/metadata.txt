@@ -1,6 +1,7 @@
 [general]
 name=Chantiers Métropole de Lyon
 qgisMinimumVersion=3.16
+qgisMaximumVersion=4.99
 description=Visualisation des chantiers en cours sur la Métropole de Lyon depuis PostGIS
 version=1.0
 author=Nicolas Rey Romano
