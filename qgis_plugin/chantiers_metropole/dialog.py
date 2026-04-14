@@ -1,15 +1,11 @@
 from qgis.PyQt.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel,
-    QComboBox, QPushButton, QGroupBox, QFormLayout,
-    QMessageBox, QTextEdit
+    QComboBox, QPushButton, QGroupBox, QFormLayout, QMessageBox
 )
-from qgis.PyQt.QtCore import Qt, QTimer
-from qgis.PyQt.QtGui import QColor
 from qgis.core import (
     QgsVectorLayer, QgsProject, QgsDataSourceUri,
     QgsCategorizedSymbolRenderer, QgsRendererCategory, QgsFillSymbol
 )
-from qgis.gui import QgsMapToolIdentifyFeature
 
 DB_HOST = "localhost"
 DB_NAME = "chantiers"
@@ -22,8 +18,6 @@ class ChantiersDialog(QDialog):
         super().__init__(iface.mainWindow())
         self.iface = iface
         self.layer = None
-        self.identify_tool = None
-        self.prev_tool = None
         self.setWindowTitle("Chantiers – Métropole de Lyon")
         self.setMinimumWidth(420)
         self.setup_ui()
@@ -60,37 +54,23 @@ class ChantiersDialog(QDialog):
         )
         self.btn_charger.clicked.connect(self.charger_couche)
 
-        self.btn_identifier = QPushButton("🖱 Identifier un chantier")
-        self.btn_identifier.setStyleSheet(
-            "background:#E87722; color:white; font-weight:bold; padding:8px; border-radius:4px;"
-        )
-        self.btn_identifier.clicked.connect(self.activer_identification)
-        self.btn_identifier.setEnabled(False)
-
         self.btn_fermer = QPushButton("Fermer")
         self.btn_fermer.clicked.connect(self.close)
 
         btn_layout.addWidget(self.btn_charger)
-        btn_layout.addWidget(self.btn_identifier)
         btn_layout.addWidget(self.btn_fermer)
         layout.addLayout(btn_layout)
-
-        # Zone d'affichage des attributs
-        self.info_box = QGroupBox("Détail du chantier")
-        info_layout = QVBoxLayout()
-        self.detail_text = QTextEdit()
-        self.detail_text.setReadOnly(True)
-        self.detail_text.setMinimumHeight(180)
-        self.detail_text.setStyleSheet("font-size:12px; font-family: monospace;")
-        self.detail_text.setPlaceholderText("Cliquez sur un chantier sur la carte pour voir ses détails...")
-        info_layout.addWidget(self.detail_text)
-        self.info_box.setLayout(info_layout)
-        layout.addWidget(self.info_box)
 
         self.label_info = QLabel("")
         self.label_info.setStyleSheet("color:#666; font-size:11px; padding:4px 0;")
         self.label_info.setWordWrap(True)
         layout.addWidget(self.label_info)
+
+        # Info utilisation
+        hint = QLabel("💡 Après chargement, utilisez l'outil Identifier (touche I) pour cliquer sur un chantier.")
+        hint.setStyleSheet("color:#888; font-size:11px; font-style:italic;")
+        hint.setWordWrap(True)
+        layout.addWidget(hint)
 
         self.setLayout(layout)
 
@@ -135,9 +115,10 @@ class ChantiersDialog(QDialog):
         self.layer = QgsVectorLayer(uri.uri(False), layer_name, "postgres")
 
         if not self.layer.isValid():
-            QMessageBox.critical(self, "Erreur", "Impossible de charger la couche PostGIS.\nVérifiez que le serveur est démarré.")
+            QMessageBox.critical(self, "Erreur", "Impossible de charger la couche PostGIS.")
             return
 
+        # Style catégorisé par état
         styles = {
             "Ouvert":  ("#E87722", 0.6),
             "Validé":  ("#C8102E", 0.6),
@@ -154,55 +135,18 @@ class ChantiersDialog(QDialog):
             categories.append(QgsRendererCategory(val, symbol, val))
 
         self.layer.setRenderer(QgsCategorizedSymbolRenderer("etat", categories))
+
+        # Expression d'affichage pour le panneau Identifier
+        self.layer.setDisplayExpression(
+            "concat('🚧 ', \"nature_chantier\", ' – ', \"commune\")"
+        )
+
         QgsProject.instance().addMapLayer(self.layer)
         self.iface.mapCanvas().setExtent(self.layer.extent())
         self.iface.mapCanvas().refresh()
 
+        # Activer l'outil Identifier automatiquement
+        self.iface.actionIdentify().trigger()
+
         nb = self.layer.featureCount()
         self.label_info.setText(f"✅ {nb} chantiers chargés.")
-        self.btn_identifier.setEnabled(True)
-
-    def activer_identification(self):
-        if not self.layer:
-            return
-
-        self.prev_tool = self.iface.mapCanvas().mapTool()
-        self.identify_tool = QgsMapToolIdentifyFeature(self.iface.mapCanvas(), self.layer)
-        self.identify_tool.featureIdentified.connect(self.afficher_detail)
-        self.iface.mapCanvas().setMapTool(self.identify_tool)
-        self.label_info.setText("🖱 Cliquez sur un chantier sur la carte...")
-        self.showMinimized()
-
-    def afficher_detail(self, feature):
-        self.showNormal()
-        self.raise_()
-
-        attrs = {
-            "N° dossier":      feature["numero"],
-            "Intervenant":     feature["intervenant"],
-            "Nature chantier": feature["nature_chantier"],
-            "Nature travaux":  feature["nature_travaux"],
-            "État":            feature["etat"],
-            "Adresse":         feature["adresse"],
-            "Commune":         feature["commune"],
-            "Début":           str(feature["date_debut"]) if feature["date_debut"] else "–",
-            "Fin prévue":      str(feature["date_fin"]) if feature["date_fin"] else "–",
-            "Mesures police":  feature["mesures_police"] or "–",
-            "Contact":         feature["contact_url"] or "–",
-        }
-
-        texte = ""
-        for key, val in attrs.items():
-            texte += f"{'─' * 35}\n{key.upper()}\n  {val}\n"
-
-        self.detail_text.setPlainText(texte)
-        self.label_info.setText("✅ Chantier identifié.")
-
-        # Remettre l'outil précédent
-        if self.prev_tool:
-            self.iface.mapCanvas().setMapTool(self.prev_tool)
-
-    def closeEvent(self, event):
-        if self.prev_tool:
-            self.iface.mapCanvas().setMapTool(self.prev_tool)
-        super().closeEvent(event)
