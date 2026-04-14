@@ -1,0 +1,15 @@
+[general]
+name=Chantiers Métropole de Lyon
+qgisMinimumVersion=3.16
+description=Visualisation des chantiers en cours sur la Métropole de Lyon depuis PostGIS
+version=1.0
+author=Nicolas Rey Romano
+email=nicolas.rey.pro38@gmail.com
+about=Plugin QGIS permettant de charger et filtrer les chantiers engagés sur la Métropole de Lyon, depuis une base PostGIS alimentée par l'API Data Grand Lyon.
+tracker=https://github.com/NicolasPro38/chantiers-metropole-Lyon
+repository=https://github.com/NicolasPro38/chantiers-metropole-Lyon
+tags=chantiers, métropole, lyon, postgis, voirie
+homepage=https://github.com/NicolasPro38/chantiers-metropole-Lyon
+category=Vector
+experimental=False
+deprecated=False
