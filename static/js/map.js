@@ -118,7 +118,7 @@ document.getElementById('detail-close').addEventListener('click', () => {
 // Chargement des chantiers
 function chargerChantiers(params = {}) {
     const qs = new URLSearchParams(params).toString();
-    const url = '/api/chantiers' + (qs ? '?' + qs : '');
+    const url = '/chantiers-metropole/api/chantiers' + (qs ? '?' + qs : '');
 
     if (chantiersLayer) map.removeLayer(chantiersLayer);
 
@@ -140,7 +140,7 @@ function chargerChantiers(params = {}) {
 
 // Chargement des communes dans le select
 function chargerCommunes() {
-    fetch('/api/communes')
+    fetch('/chantiers-metropole/api/communes')
         .then(r => r.json())
         .then(data => {
             const sel = document.getElementById('filter-commune');
@@ -155,7 +155,7 @@ function chargerCommunes() {
 
 // Chargement des stats et graphiques
 function chargerStats() {
-    fetch('/api/stats')
+    fetch('/chantiers-metropole/api/stats')
         .then(r => r.json())
         .then(data => {
             // Stat cards
