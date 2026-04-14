@@ -30,7 +30,6 @@ class ChantiersDialog(QDialog):
         titre.setStyleSheet("font-size:14px; font-weight:bold; color:#C8102E; padding:8px 0;")
         layout.addWidget(titre)
 
-        # Filtres
         group = QGroupBox("Filtres")
         form = QFormLayout()
 
@@ -48,7 +47,6 @@ class ChantiersDialog(QDialog):
         group.setLayout(form)
         layout.addWidget(group)
 
-        # Boutons chargement
         btn_layout = QHBoxLayout()
         self.btn_charger = QPushButton("Charger la couche")
         self.btn_charger.setStyleSheet(
@@ -63,44 +61,12 @@ class ChantiersDialog(QDialog):
         btn_layout.addWidget(self.btn_fermer)
         layout.addLayout(btn_layout)
 
-        # Boutons édition
-        group_edit = QGroupBox("Édition PostGIS")
-        edit_layout = QHBoxLayout()
-
-        self.btn_editer = QPushButton("✏️ Activer l'édition")
-        self.btn_editer.setStyleSheet(
-            "background:#E87722; color:white; font-weight:bold; padding:8px; border-radius:4px;"
-        )
-        self.btn_editer.clicked.connect(self.activer_edition)
-        self.btn_editer.setEnabled(False)
-
-        self.btn_sauvegarder = QPushButton("💾 Sauvegarder")
-        self.btn_sauvegarder.setStyleSheet(
-            "background:#2e7d32; color:white; font-weight:bold; padding:8px; border-radius:4px;"
-        )
-        self.btn_sauvegarder.clicked.connect(self.sauvegarder)
-        self.btn_sauvegarder.setEnabled(False)
-
-        self.btn_annuler_edit = QPushButton("↩️ Annuler")
-        self.btn_annuler_edit.setStyleSheet(
-            "background:#666; color:white; font-weight:bold; padding:8px; border-radius:4px;"
-        )
-        self.btn_annuler_edit.clicked.connect(self.annuler_edition)
-        self.btn_annuler_edit.setEnabled(False)
-
-        edit_layout.addWidget(self.btn_editer)
-        edit_layout.addWidget(self.btn_sauvegarder)
-        edit_layout.addWidget(self.btn_annuler_edit)
-        group_edit.setLayout(edit_layout)
-        layout.addWidget(group_edit)
-
-        # Info
         self.label_info = QLabel("")
         self.label_info.setStyleSheet("color:#666; font-size:11px; padding:4px 0;")
         self.label_info.setWordWrap(True)
         layout.addWidget(self.label_info)
 
-        hint = QLabel("💡 Utilisez l'outil Identifier (touche I) pour cliquer sur un chantier. En mode édition, double-cliquez sur un attribut dans la table pour le modifier.")
+        hint = QLabel("💡 Après chargement, utilisez l'outil Identifier (touche I) pour cliquer sur un chantier et voir ses attributs.")
         hint.setStyleSheet("color:#888; font-size:11px; font-style:italic;")
         hint.setWordWrap(True)
         layout.addWidget(hint)
@@ -151,7 +117,6 @@ class ChantiersDialog(QDialog):
             QMessageBox.critical(self, "Erreur", "Impossible de charger la couche PostGIS.")
             return
 
-        # Style catégorisé par état
         styles = {
             "Ouvert":  ("#E87722", 0.6),
             "Validé":  ("#C8102E", 0.6),
@@ -179,39 +144,3 @@ class ChantiersDialog(QDialog):
 
         nb = self.layer.featureCount()
         self.label_info.setText(f"✅ {nb} chantiers chargés.")
-        self.btn_editer.setEnabled(True)
-
-    def activer_edition(self):
-        if not self.layer:
-            return
-        self.layer.startEditing()
-        self.btn_editer.setEnabled(False)
-        self.btn_sauvegarder.setEnabled(True)
-        self.btn_annuler_edit.setEnabled(True)
-        self.label_info.setText("✏️ Mode édition activé. Modifiez les attributs via la table attributaire (F6).")
-        # Ouvrir la table attributaire
-        self.iface.showAttributeTable(self.layer)
-
-    def sauvegarder(self):
-        if not self.layer:
-            return
-        if self.layer.isEditable():
-            if self.layer.commitChanges():
-                self.label_info.setText("💾 Modifications sauvegardées dans PostGIS.")
-                QMessageBox.information(self, "Succès", "Les modifications ont été sauvegardées dans PostGIS.")
-            else:
-                errors = self.layer.commitErrors()
-                self.label_info.setText(f"❌ Erreur : {', '.join(errors)}")
-                QMessageBox.critical(self, "Erreur", f"Impossible de sauvegarder :\n{chr(10).join(errors)}")
-        self.btn_editer.setEnabled(True)
-        self.btn_sauvegarder.setEnabled(False)
-        self.btn_annuler_edit.setEnabled(False)
-
-    def annuler_edition(self):
-        if not self.layer:
-            return
-        self.layer.rollBack()
-        self.label_info.setText("↩️ Modifications annulées.")
-        self.btn_editer.setEnabled(True)
-        self.btn_sauvegarder.setEnabled(False)
-        self.btn_annuler_edit.setEnabled(False)
